@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>新书上架</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <link rel="stylesheet" href="css/page.css">
+  <script src="js/jquery-3.3.1.min.js"></script>
+</head>
+
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+
+    <!-- 引入头部 -->
+    <?php require('pages/include/header.html');?>
+    <!-- 引入菜单 -->
+    <?php require('pages/include/menu.html');?>
+
+
+    <div class="layui-body">
+      <!-- 内容主体区域 -->
+      <div style="padding: 15px;">
+        <div class="addnew">
+          <a href="main.php?go=booklist" class="layui-btn layui-btn-warm">图书列表</a>
+          <a href="main.php?go=bookadd" class="layui-btn">新书上架</a>
+        </div>
+        <div style="clear:both;"></div>
+
+        <div class="createBody">
+          <form class="layui-form" action="main.php" method="POST" enctype="multipart/form-data">
+
+              <input type="hidden" name="go" value="book_add_do">
+            <div class="layui-form-item">
+              <label class="layui-form-label">选择分类</label>
+              <div style="display:flex;justify-content: left;">
+                <div class="layui-input-block" style="width:20%;margin-left: 0;">
+                  <select name="pclass" lay-filter="pclass" lay-verify="required">
+                    <option value="">请选择一级分类</option>
+                    <?php echo $option_parent;?>
+                  </select>
+                </div>
+                <div class="layui-input-block" style="width:20%; margin-left: 0;">
+                  <select name="cclass" lay-verify="required" id="cclass">
+                    <option value="">请选择二级分类</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">图书名称</label>
+              <div class="layui-input-block">
+                <input type="text" name="bookname" required lay-verify="required" placeholder="请输入图书名称"
+                  autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">作者</label>
+              <div class="layui-input-block">
+                <input type="text" name="author" required lay-verify="required" placeholder="请输入作者" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">出版社</label>
+              <div class="layui-input-block">
+                <input type="text" name="publicer" required lay-verify="required" placeholder="请输入出版社"
+                  autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">9.9包邮</label>
+              <div class="layui-input-block">
+                <input type="radio" name="freeposter" value="1" title="是">
+                <input type="radio" name="freeposter" value="0" title="否" checked>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">价格</label>
+              <div class="layui-input-block">
+                <input type="text" name="price" required lay-verify="required" placeholder="请输入价格" autocomplete="off"
+                  class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <label class="layui-form-label">上传封面</label>
+              <div class="layui-input-block">
+                <!-- <i id="upload-ico" class="layui-icon layui-icon-upload" style="font-size: 50px; color: #1E9FFF;"></i>  -->
+                <input type="file" name="poster[]" id="poster" style="display:none;" required lay-verify="required" multiple="multiple" accept="image/*">
+                <button type="button" class="layui-btn" id="upload-ico">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                  </button>
+              </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">图书介绍</label>
+              <div class="layui-input-block">
+                <!-- <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea> -->
+                <div id="editor">
+                    <p>富文本编辑器</p>
+                </div>
+                <textarea id="descript" name="descript" style="width:100%; height:200px;display: none;" ></textarea>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">上架日期</label>
+              <div class="layui-input-block">
+                <input type="text" class="layui-input" id="dt" name="dt">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-footer">
+      <!-- 底部固定区域 -->
+      © layui.com - 底部固定区域
+    </div>
+  </div>
+
+  <script src="layui/layui.js"></script>
+  <script type="text/javascript" src="js/wangEditor.min.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+      var element = layui.element;
+
+    });
+
+    layui.use('form', function () {
+      var form = layui.form;
+
+      //监听提交
+      // form.on('submit(formDemo)', function (data) {
+      //   // layer.msg(JSON.stringify(data.field));
+      //   // return false;
+      // });
+    });
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#dt' //指定元素
+      });
+    });
+    //jquery  处理下拉菜单
+    layui.use(['layer', 'form'], function () {
+      //   var layer = layui.layer;
+      var form = layui.form;
+      var $ = layui.$;
+      form.on('select(pclass)', function (data) {
+        console.log(data);
+        //获取当前所选的项目值
+        var id = data.value;
+
+        //使用ajax 根据id 获取二级分类
+        $.get('main.php?go=ajax_class_select', { id: id }, function (res) {
+          //改变二级分类的内容
+          $('#cclass').html(res);
+
+          //重新渲染页面 layui
+          form.render('select');
+
+        })
+      });
+
+    });
+    //文本编辑器
+    var E = window.wangEditor;
+
+        // var editor = new E(document.getElementById('editor'))
+        // editor.customConfig.uploadImgServer = 'upload';
+        var editor = new E('#editor')
+        editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+        // editor.customConfig.uploadImgServer = '/upload'  // 上传图片到服务器
+        var $descript = $('#descript')
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $descript.val(html)
+        }
+        editor.create()
+        // 初始化 textarea 的值
+        // $text1.val(editor.txt.html())
+        
+//   layui.use('upload', function(){
+//   var upload = layui.upload;
+   
+//   //执行实例
+//   var uploadInst = upload.render({
+//     elem: '#test1' //绑定元素
+//     ,url: '/upload/' //上传接口
+//     ,done: function(res){
+//       //上传完毕回调
+//     }
+//     ,error: function(){
+//       //请求异常回调
+//     }
+//   });
+// });
+
+  </script>
+  <script>
+      $(function(){
+        $('#upload-ico').click(function(){
+          $('#poster').click();
+        })
+      })
+  </script>
+</body>
+
+</html>

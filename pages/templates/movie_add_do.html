@@ -1,0 +1,92 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>影片上架</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <link rel="stylesheet" href="css/page.css">
+  <script src="js/jquery-3.3.1.min.js"></script>
+</head>
+
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+
+    <!-- 引入头部 -->
+    <?php require('pages/include/header.html');?>
+    <!-- 引入菜单 -->
+    <?php require('pages/include/menu.html');?>
+
+
+    <div class="layui-body">
+      <!-- 内容主体区域 -->
+      <div style="padding: 15px;">
+        <div class="addnew">
+            <a href="main.php?go=movielist" class="layui-btn layui-btn-warm">电影列表</a>
+            <a href="main.php?go=movieadd" class="layui-btn">影片上架</a>
+        </div>
+        <div style="clear:both;"></div>
+
+        <div class="createBody">
+            <?php echo $result;?>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-footer">
+      <!-- 底部固定区域 -->
+      © layui.com - 底部固定区域
+    </div>
+  </div>
+
+  <script src="layui/layui.js"></script>
+  <script type="text/javascript" src="js/wangEditor.min.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+      var element = layui.element;
+
+    });
+
+    layui.use('form', function () {
+      var form = layui.form;
+    });
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#dt' //指定元素
+      });
+    });
+    //文本编辑器
+    var E = window.wangEditor;
+        var editor = new E('#editor')
+        editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+        // editor.customConfig.uploadImgServer = '/upload'  // 上传图片到服务器
+        var $descript = $('#descript')
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $descript.val(html)
+        }
+        editor.create()
+
+  </script>
+  <script>
+      $(function(){
+        $('#upload-ico').click(function(){
+          $('#poster').click();
+        });
+        $('#test2').click(function(){
+          $('#music').click();
+        })
+      })
+  </script>
+</body>
+
+</html>
